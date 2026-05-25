@@ -1,36 +1,42 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FaceSnap } from '../models/face-snap';
+import { NgStyle, NgClass, UpperCasePipe, LowerCasePipe, TitleCasePipe, DatePipe,} from '@angular/common';
 
 @Component({
   selector: 'app-face-snap',
   standalone: true,
-  imports: [],
+  imports: [
+    NgStyle, 
+    NgClass,
+    UpperCasePipe,
+    LowerCasePipe,
+    TitleCasePipe,
+    DatePipe,
+  ],
   templateUrl: './face-snap.component.html',
   styleUrl: './face-snap.component.scss'
 })
 export class FaceSnapComponent implements OnInit{
-  title! : string;
-  description! : string;
-  createdAt!: Date;
-  snaps!: number;
-  imageUrl!: string;
+  @Input () facesnap!: FaceSnap;
+  snapButtonText! : string;
+  isLiked! : boolean;
 
   ngOnInit(): void {
-    this.title = 'Julia';
-    this.description = 'La plus belle femme du monde'
-    this.createdAt = new Date();
-    this.snaps = 0;
-    this.imageUrl = "https://plus.unsplash.com/premium_photo-1668902223894-053948883caa?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  }
-  onAddSnap(isLiked: boolean): boolean {
-    if (isLiked == true){
-      this.snaps--;
-      isLiked = false;
+    this.snapButtonText = "J'aime"
+    this.isLiked = false;
+    }
+  onAddSnap() : void {
+    if (this.isLiked){
+      this.facesnap.unSnap()
+      this.snapButtonText = "J'aime"
+      this.isLiked = false;
     }
     else{
-      this.snaps++;
-      isLiked = true;
+      this.facesnap.addSnap()
+      this.snapButtonText = "Je n'aime plus"
+      this.isLiked = true;
+      
     }
-    return isLiked;
   }
 
 }
